@@ -1,0 +1,31 @@
+#!/bin/bash
+
+REPO="$(dirname "$BASH_SOURCE")"
+FILEDIR="$REPO/files"
+BACKUPDIR="$REPO/old-files"
+TARGETDIR="$HOME"
+TARGETS=".vimrc .vim .screenrc"
+
+moveOldFile() {
+  local src="$1"
+  local dst="$BACKUPDIR/."
+  if [ ! -d "$BACKUPDIR" ]; then
+    mkdir "$BACKUPDIR"
+  fi
+  mv "$src" "$dst"
+  echo "File $src exists. It has been moved into $BACKUPDIR."
+}
+
+main() {
+  for item in $TARGETS; do
+    local sourcePath="$FILEDIR/$item"
+    local targetPath="$TARGETDIR/$item"
+    local absPath="$(readlink -f "$sourcePath")"
+    if [ -e "$targetPath" ]; then
+      moveOldFile "$targetPath"
+    fi
+    ln -s "$absPath" "$targetPath"
+  done
+}
+
+main

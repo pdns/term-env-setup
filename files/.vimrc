@@ -30,6 +30,7 @@ function GetCommentPrepend()
 \  'htmldjango': '<\!--',
 \  'vim': '"',
 \  'cpp': '//',
+\  'tex': '%',
 \ }
   return get(data, &ft, '')
 endfunction
